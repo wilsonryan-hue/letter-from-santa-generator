@@ -28,3 +28,7 @@ A fun keepsake, not an official or postal service.
 ## Licence
 
 MIT. Letter wording written by [TCH Works](https://www.tchworks.co.uk/?utm_source=github&utm_medium=repo&utm_campaign=santa-letter-repo), which also publishes [free Christmas tools](https://www.tchworks.co.uk/free/?utm_source=github&utm_medium=repo&utm_campaign=santa-letter-repo), [Christmas cards](https://www.tchworks.co.uk/cards/christmas/?utm_source=github&utm_medium=repo&utm_campaign=santa-letter-repo) and a printable [Christmas Budget & Gift Planner](https://tchworks.gumroad.com/l/kazjns?utm_source=github&utm_medium=repo&utm_campaign=santa-letter-repo).
+
+## Free printable PDF
+
+Prefer to handwrite it? Download the free fill-in A4 letters (ages 3-5, 6-8, 9+ and a blank one) from the [v1.0.0-free-printable release](https://github.com/wilsonryan-hue/letter-from-santa-generator/releases/tag/v1.0.0-free-printable).

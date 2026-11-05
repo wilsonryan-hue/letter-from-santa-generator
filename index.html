@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Free letter from Santa generator: personalised, printable, one per child</title>
+<meta name="description" content="Type each child's name, age and one kind thing they did this year and print a personalised A4 letter from Santa for each of them. One HTML file, nothing saved or sent.">
+<style>
+:root{--navy:#0D1323;--red:#B91C1C;--line:#D1D5DB;--muted:#6B7280;--yellow:#FBBF24}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#1F2937;background:#F9FAFB}
+main{max-width:52rem;margin:0 auto;padding:1.2rem 1rem 3rem}
+h1{color:var(--navy);font-size:clamp(1.6rem,4vw,2.3rem);line-height:1.15;margin:.3rem 0 .5rem}
+.lede{font-size:1.08rem}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem;margin:1rem 0}
+.kid{border-top:1px solid var(--line);padding:.8rem 0}
+.kid:first-of-type{border-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.6rem 1rem}
+label{display:block;font-weight:700;color:var(--navy);font-size:.92rem;margin-bottom:.15rem}
+input,select{font:inherit;border:1.5px solid var(--line);border-radius:8px;padding:.4rem .5rem;background:#fff;width:100%}
+button{font:inherit;font-weight:800;border:0;border-radius:10px;padding:.65rem 1rem;cursor:pointer;background:var(--yellow);color:var(--navy)}
+button.alt{background:var(--navy);color:#fff}
+button.rm{background:#F3F4F6;color:#374151;font-weight:600;padding:.35rem .7rem;font-size:.9rem}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.muted{color:var(--muted);font-size:.93rem}
+.letter{background:#FFFDF7;border:3px double var(--red);border-radius:6px;padding:2rem 2.2rem;margin:1rem auto;font-family:Georgia,"Times New Roman",serif;line-height:1.65;font-size:1.06rem;max-width:42rem}
+.letter .hd{text-align:center;color:var(--red);font-weight:700;letter-spacing:.04em;margin:0 0 .2rem;font-size:1.22rem}
+.letter .sub{text-align:center;color:var(--muted);font-size:.9rem;margin:0 0 1.1rem}
+.letter p{margin:.65rem 0}
+.letter .sig{font-size:1.45rem;font-style:italic;color:var(--red);margin-top:1.1rem}
+footer{margin-top:2rem;font-size:.9rem;color:var(--muted)}
+@media print{
+ @page{size:A4;margin:1.2cm}
+ body{background:#fff}
+ .np{display:none!important}
+ main{padding:0;max-width:none}
+ .letter{margin:0 auto;font-size:12.5pt;padding:1.4cm 1.6cm;max-width:none;break-after:page;break-inside:avoid}
+ .letter:last-child{break-after:auto}
+}
+</style>
+</head>
+<body>
+<main>
+<div class="np">
+<h1>Free letter from Santa generator</h1>
+<p class="lede">Add each child, type their name, age and one kind or brave thing they did this year, and print a personal letter from Santa for every one of them, one A4 page each. Nothing is saved or sent: it all happens in this page.</p>
+
+<div class="card">
+ <div id="kids"></div>
+ <div class="row">
+  <button type="button" class="alt" id="add">+ Add another child</button>
+  <label style="display:flex;gap:.4rem;align-items:center;font-weight:600;margin:0"><span>Style</span>
+   <select id="tone" style="width:auto"><option value="warm" selected>Warm and gentle</option><option value="fun">Jolly and silly</option></select></label>
+ </div>
+ <div class="row">
+  <button type="button" id="print">Print all letters</button>
+  <span class="muted">Choose A4. Tick "Background graphics" if your browser offers it, for the red border. Choose "Save as PDF" for a file.</span>
+ </div>
+</div>
+<h2 style="color:var(--navy);font-size:1.2rem">Preview</h2>
+</div>
+
+<div id="out"></div>
+
+<footer class="np">
+<p>The letters never promise a particular present: Santa says he has read the list and a good surprise is half the fun, so you stay in control on Christmas morning. It is a fun keepsake, not an official or postal service. Letter wording written by TCH Works.</p>
+<p>More free Christmas tools: <a href="https://www.tchworks.co.uk/free/?utm_source=github&amp;utm_medium=repo&amp;utm_campaign=santa-letter-repo">tchworks.co.uk/free</a> · <a href="https://www.tchworks.co.uk/cards/christmas/?utm_source=github&amp;utm_medium=repo&amp;utm_campaign=santa-letter-repo">Christmas cards</a> · <a href="https://tchworks.gumroad.com/l/kazjns?utm_source=github&amp;utm_medium=repo&amp;utm_campaign=santa-letter-repo">Christmas Budget &amp; Gift Planner (£2.99)</a></p>
+</footer>
+</main>
+<script>
+(function(){
+function $(i){return document.getElementById(i);}
+function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+var AGES='<option value="3">3 or under</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7" selected>7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11 or over</option>';
+function addKid(){
+ var d=document.createElement("div");d.className="kid";
+ d.innerHTML='<div class="grid">'+
+  '<div><label>Child\'s first name</label><input class="k-name" maxlength="30" placeholder="e.g. Ava" autocomplete="off"></div>'+
+  '<div><label>Age</label><select class="k-age">'+AGES+'</select></div>'+
+  '<div><label>One kind or brave thing they did</label><input class="k-kind" maxlength="80" placeholder="e.g. helped Grandad in the garden" autocomplete="off"></div>'+
+  '<div><label>Sibling or pet to mention (optional)</label><input class="k-pal" maxlength="40" placeholder="e.g. Max the dog" autocomplete="off"></div>'+
+  '<div><label>Elf\'s name (optional)</label><input class="k-elf" maxlength="30" placeholder="e.g. Twinkle" autocomplete="off"></div>'+
+  '<div style="align-self:end"><button type="button" class="rm">Remove</button></div></div>';
+ d.querySelector(".rm").onclick=function(){if(document.querySelectorAll(".kid").length>1){d.remove();run();}};
+ d.addEventListener("input",run);d.addEventListener("change",run);
+ $("kids").appendChild(d);run();
+}
+function letter(k,fun){
+ var name=k.name||"my dear friend",age=k.age,kind=k.kind.replace(/[.!]+$/,""),pal=k.pal,elf=k.elf,P=[];
+ P.push('Dear '+esc(name)+',');
+ if(age<=5){P.push(fun?'Ho ho ho! It is me, Santa, and I have been giggling in my sleigh shed because the elves just told me all about you.':'I hope you are snuggled up and cosy. It is Santa here, writing to you from my workshop at the North Pole, where it is snowing softly outside.');}
+ else if(age<=8){P.push(fun?'Ho ho ho! Santa here, from my workshop at the North Pole. The reindeer are practising their zooms, Rudolph has polished his nose, and I have just finished checking my list for the second time.':'Santa here, writing from my workshop at the North Pole. The snow is falling, the reindeer are stretching their legs and the elves are very busy, but I wanted to take a moment to write to you.');}
+ else{P.push(fun?'Ho ho ho! Santa here. Yes, it is really me, and yes, the reindeer are already complaining about the early start. The elves have the workshop in full swing and I have been busy reading my list.':'Santa here. The workshop at the North Pole is at its busiest, and the elves have strung lights all along the workshop roof, but I wanted to write to you properly.');}
+ if(kind){P.push('I have heard that you '+esc(kind)+'. That made me smile so much that my belly wobbled. Kindness like that is the best sort of Christmas magic, and it is exactly what I look for when I check my list.');}
+ else{P.push('The elves tell me you have been trying hard this year, and they notice the little things, like a kind word and a helping hand. That is exactly the sort of Christmas magic I look for when I check my list.');}
+ if(pal){P.push('Please give '+esc(pal)+' a big hello from me, too. I have not forgotten them.');}
+ if(elf){P.push('Your elf '+esc(elf)+' has been sending me very good reports. Please keep being kind to '+esc(elf)+' and remember the rules: look, but do not touch!');}
+ if(age<=5){P.push('I have read your list and the elves are busy making things. Please go to bed on time on Christmas Eve, because I can only come when everyone is fast asleep. I will leave something special for you.');}
+ else if(age<=8){P.push('I have read your list carefully, and the elves are busy in the workshop. I cannot say what is in my sack, because a good surprise is half the fun, but I promise to do my very best. Remember to be in bed and fast asleep on Christmas Eve, because I can only visit once the house is quiet.');}
+ else{P.push('I have read your list carefully, and I am doing my best with it. A good surprise is half the fun, so I will keep what is in my sack a secret for now. And as you are growing up, I have a small job for you: help the younger ones in your family believe in a little magic, because that is how it lasts.');}
+ P.push('Be good, keep being kind, and wrap up warm on Christmas Eve. I will see you very soon.');
+ var yr=new Date().getFullYear();
+ var h='<div class="letter"><p class="hd">&#9733; From the desk of Santa Claus &#9733;</p><p class="sub">The Workshop &middot; The North Pole &middot; December '+yr+'</p>';
+ for(var i=0;i<P.length;i++){h+='<p>'+P[i]+'</p>';}
+ return h+'<p class="sig">With love and jingle bells,<br>Santa</p><p>P.S. Leave a carrot out for the reindeer. They have a long night ahead!</p></div>';
+}
+function run(){
+ var fun=$("tone").value==="fun",h="",ks=document.querySelectorAll(".kid");
+ for(var i=0;i<ks.length;i++){var q=function(c){return ks[i].querySelector(c).value.trim();};
+  h+=letter({name:q(".k-name"),age:parseInt(q(".k-age"),10),kind:q(".k-kind"),pal:q(".k-pal"),elf:q(".k-elf")},fun);}
+ $("out").innerHTML=h;
+}
+$("add").onclick=addKid;$("tone").onchange=run;$("print").onclick=function(){window.print();};
+addKid();
+})();
+</script>
+</body>
+</html>

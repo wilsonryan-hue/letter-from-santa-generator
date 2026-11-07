@@ -32,3 +32,7 @@ MIT. Letter wording written by [TCH Works](https://www.tchworks.co.uk/?utm_sourc
 ## Free printable PDF
 
 Prefer to handwrite it? Download the free fill-in A4 letters (ages 3-5, 6-8, 9+ and a blank one) from the [v1.0.0-free-printable release](https://github.com/wilsonryan-hue/letter-from-santa-generator/releases/tag/v1.0.0-free-printable).
+
+## Free Gumroad download
+
+Also free on Gumroad (instant download): https://tchworks.gumroad.com/l/sfawk
